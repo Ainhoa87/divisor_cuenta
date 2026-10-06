@@ -1,50 +1,55 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: plantilla sin versión → 1.0.0 (constitución inicial).
+- Principios añadidos: Calidad de código, Arquitectura, Seguridad, Calidad y pruebas, Regla de la materia.
+- Secciones añadidas: Alcance del proyecto, Estándares del proyecto.
+- Secciones eliminadas: ninguna.
+- Pendiente: confirmar la fecha original de ratificación.
+-->
 
-## Core Principles
+# Constitución de Divisor Cuenta
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+## Principios fundamentales
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### I. Calidad de código: SOLID
+El código MUST respetar SOLID. SRP: cada clase tendrá una sola razón de cambio; el cálculo
+no validará ni formateará. OCP: agregar una regla de redondeo no requerirá editar las
+clases existentes. LSP: cualquier implementación de una interfaz podrá sustituir a otra
+sin que quien la use tenga que identificar su tipo. ISP: las interfaces serán pequeñas y
+ningún consumidor dependerá de métodos que no use. DIP: presentation dependerá de
+abstracciones de domain y nunca de clases concretas de data.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Arquitectura
+El código se organizará en las capas `presentation`, `domain` y `data`, con dependencias
+`presentation -> domain <- data`. `lib/domain/` será Dart puro y no importará
+`package:flutter`. `main.dart` será el único lugar donde se instancien implementaciones
+concretas.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### III. Seguridad
+Nunca se guardarán secretos ni API keys en el repositorio.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### IV. Calidad y pruebas
+Toda funcionalidad crítica tendrá pruebas. Los criterios de aceptación de cada spec se
+convertirán en pruebas ejecutables.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### V. Regla de la materia
+El estudiante deberá poder explicar cada función generada por el agente: qué hace, por
+qué existe, qué recibe, qué devuelve y qué errores produce.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Alcance del proyecto
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+La aplicación es una app Flutter de una sola pantalla para dividir una cuenta.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Estándares del proyecto
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+El código usará null safety, nombres en español y no agregará paquetes externos.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+## Gobernanza
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Esta constitución guía las decisiones de implementación del proyecto. Toda enmienda se
+registrará aquí y actualizará la versión: MAJOR para cambios incompatibles en los
+principios, MINOR para agregar o ampliar principios y PATCH para aclaraciones sin cambio
+de significado. En cada revisión de cambios se comprobará su conformidad con estos
+principios y se revisarán las pruebas ejecutables correspondientes.
+
+**Versión**: 1.0.0 | **Ratificada**: TODO(RATIFICATION_DATE): fecha original desconocida | **Última modificación**: 2026-10-06

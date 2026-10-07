@@ -4,13 +4,12 @@
 
 - Flutter installed on its stable channel, with the Dart SDK bundled with Flutter.
 - The project checked out locally.
-- No Internet connection is required while using the calculator. Dependency setup may
-  contact package servers until the planned dependency cleanup is complete.
+- No Internet connection is required while using the calculator. It uses only the
+  Flutter SDK and its bundled `flutter_test` package.
 
 ## Setup and validation commands
 
-After implementation removes the unused third-party `cupertino_icons` and
-`flutter_lints` dependencies:
+Run these commands from the project root:
 
 ```powershell
 flutter pub get
@@ -20,8 +19,8 @@ flutter run
 ```
 
 `flutter_test` is included with the Flutter SDK. `flutter analyze` should complete with
-no issues. `flutter test` should include executable coverage for the six acceptance
-scenarios and the pure Dart calculation/validation behavior.
+no issues. `flutter test` covers the six acceptance scenarios, invalid inputs, and an
+offline calculation with HTTP client creation blocked.
 
 ## Acceptance walkthrough
 
@@ -39,5 +38,5 @@ On the single screen, enter the values, select the rounding mode, and press **Ca
 For the offline criterion, enable airplane mode, enter valid values, and confirm that a
 calculation still succeeds. No network call or database is part of the calculation.
 
-This plan phase creates documentation only; it does not change application code,
-dependencies, or tests.
+The automated offline test blocks HTTP client creation. For a manual device check,
+enable airplane mode and repeat a valid calculation.

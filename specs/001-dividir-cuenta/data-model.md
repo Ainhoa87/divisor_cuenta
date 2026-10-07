@@ -39,10 +39,13 @@ Validation rules:
 Pure Dart interface with one method receiving a numeric per-person share and returning
 the adjusted numeric share. It is the abstraction consumed by `CalcularDivision`.
 
-## `ModoRedondeo`
+## Strategy registry
 
-Domain identifier for the two user-selectable modes: exact and upward. It selects an
-injected strategy without making the controller depend on implementation classes.
+`DivisorController` receives an open `Map<String, EstrategiaRedondeo>` by constructor.
+`main.dart` registers the initial keys `exacto` and `hacia-arriba`; presentation receives
+the corresponding display labels and derives its options from the registry. Adding a
+strategy adds an implementation and a composition registration without changing the
+existing calculation, controller, screen, or a closed mode enum.
 
 ## `CalcularDivision`
 

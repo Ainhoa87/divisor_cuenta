@@ -49,8 +49,8 @@ strategies, and the six acceptance scenarios in the specification.
 ### Before design
 
 - **SOLID**: Pass. Calculation, validation, and formatting remain separate. Rounding
-  is represented by a one-method abstraction so the calculation does not branch on
-  concrete strategy types.
+  is represented by a one-method abstraction; the available strategies are registered
+  at the composition root, so a new strategy does not require editing existing classes.
 - **Architecture**: Pass. The requested `presentation`, `domain`, and `data` layers
   follow `presentation -> domain <- data`; domain stays free of Flutter imports.
 - **Composition**: Pass. `main.dart` is the sole composition root for concrete
@@ -94,8 +94,7 @@ lib/
 │   ├── resultado.dart
 │   ├── calcular_division.dart
 │   ├── validar_entrada.dart
-│   ├── estrategia_redondeo.dart
-│   └── modo_redondeo.dart
+│   └── estrategia_redondeo.dart
 ├── data/
 │   ├── redondeo_exacto.dart
 │   └── redondeo_hacia_arriba.dart
@@ -122,13 +121,16 @@ No constitution violations. No extra application layer or external service is ne
 
 - `CalcularDivision` receives an `EstrategiaRedondeo` abstraction for a calculation;
   it computes `(monto + monto * propina / 100) / personas` and delegates rounding.
-- `DivisorController` receives `ValidarEntrada`, `CalcularDivision`, and the available
-  strategies by constructor. It selects a strategy using `ModoRedondeo`, not concrete
-  `data` types.
-- `main.dart` creates `RedondeoExacto` and `RedondeoHaciaArriba`, registers them with
-  the domain mode identifiers, and injects the resulting dependencies.
-- `PantallaDivisor` owns text controllers and selected mode. It asks the controller to
-  calculate only when the user taps **Calcular**, then uses `setState` for the outcome.
+- `DivisorController` receives `ValidarEntrada`, `CalcularDivision`, and an open map of
+  strategy identifiers to `EstrategiaRedondeo` by constructor. It selects by identifier
+  and never imports concrete `data` types or a closed mode enum.
+- `main.dart` creates `RedondeoExacto` and `RedondeoHaciaArriba`, registers them under
+  the keys `exacto` and `hacia-arriba`, provides their Spanish labels, and injects the
+  registry. The screen renders registered options, so adding a strategy changes only
+  the composition registration and adds the new implementation.
+- `PantallaDivisor` owns text controllers and the selected strategy identifier. It asks
+  the controller to calculate only when the user taps **Calcular**, then uses `setState`
+  for the outcome.
 - `FormateadorMoneda` formats the result to two decimal places and retains the current
   screen's USD presentation. It does not change the domain value.
 - The repository currently declares `cupertino_icons` and `flutter_lints`. Neither is

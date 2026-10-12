@@ -28,6 +28,29 @@ String _mensajePara(CodigoErrorEntrada error) => switch (error) {
 };
 
 void main() {
+  test('rechaza una propina mayor al 100%', () {
+    final entrada = ValidarEntrada().validar(
+      monto: '100',
+      personas: '4',
+      propina: '150',
+    );
+
+    expect(entrada.error, isNotNull);
+    expect(_mensajePara(entrada.error!), 'La propina no puede superar el 100%');
+    expect(entrada.cuenta, isNull);
+  });
+
+  test('permite una propina exactamente del 100%', () {
+    final entrada = ValidarEntrada().validar(
+      monto: '100',
+      personas: '4',
+      propina: '100',
+    );
+
+    expect(entrada.error, isNull);
+    expect(entrada.cuenta, isNotNull);
+  });
+
   for (final caso in casos) {
     test(caso.nombre, () {
       final entrada = ValidarEntrada().validar(

@@ -33,7 +33,7 @@ class DivisorController {
     if (error != null) {
       return (
         resultado: null,
-        mensajeError: entrada.mensajeError ?? _mensajePara(error),
+        mensajeError: _mensajePara(error),
       );
     }
 
@@ -54,6 +54,8 @@ class DivisorController {
   }
 
   String _mensajePara(CodigoErrorEntrada error) => switch (error) {
+    CodigoErrorEntrada.propinaMayorAlCien =>
+      'La propina no puede superar el 100%',
     CodigoErrorEntrada.montoInvalido => 'Monto inválido',
     CodigoErrorEntrada.personasInsuficientes =>
       'Debe haber al menos una persona',

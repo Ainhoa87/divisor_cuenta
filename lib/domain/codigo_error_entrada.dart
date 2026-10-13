@@ -3,4 +3,5 @@ enum CodigoErrorEntrada {
   montoInvalido,
   personasInsuficientes,
   propinaInvalida,
+  propinaMayorAlCien,
 }

@@ -4,7 +4,7 @@ import 'cuenta.dart';
 /// Convierte y valida los textos recibidos desde el formulario.
 class ValidarEntrada {
   /// Devuelve una cuenta válida o un código de error, nunca ambos.
-  ({Cuenta? cuenta, CodigoErrorEntrada? error, String? mensajeError}) validar({
+  ({Cuenta? cuenta, CodigoErrorEntrada? error}) validar({
     required String monto,
     required String personas,
     required String propina,
@@ -14,7 +14,6 @@ class ValidarEntrada {
       return (
         cuenta: null,
         error: CodigoErrorEntrada.montoInvalido,
-        mensajeError: null,
       );
     }
 
@@ -23,7 +22,6 @@ class ValidarEntrada {
       return (
         cuenta: null,
         error: CodigoErrorEntrada.personasInsuficientes,
-        mensajeError: null,
       );
     }
 
@@ -32,14 +30,12 @@ class ValidarEntrada {
       return (
         cuenta: null,
         error: CodigoErrorEntrada.propinaInvalida,
-        mensajeError: null,
       );
     }
     if (porcentajePropina > 100) {
       return (
         cuenta: null,
-        error: CodigoErrorEntrada.propinaInvalida,
-        mensajeError: 'La propina no puede superar el 100%',
+        error: CodigoErrorEntrada.propinaMayorAlCien,
       );
     }
 
@@ -50,7 +46,6 @@ class ValidarEntrada {
         porcentajePropina: porcentajePropina,
       ),
       error: null,
-      mensajeError: null,
     );
   }
 

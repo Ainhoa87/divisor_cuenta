@@ -31,7 +31,10 @@ class DivisorController {
 
     final error = entrada.error;
     if (error != null) {
-      return (resultado: null, mensajeError: _mensajePara(error));
+      return (
+        resultado: null,
+        mensajeError: entrada.mensajeError ?? _mensajePara(error),
+      );
     }
 
     final cuenta = entrada.cuenta;

@@ -25,6 +25,8 @@ String _mensajePara(CodigoErrorEntrada error) => switch (error) {
   CodigoErrorEntrada.montoInvalido => 'Monto inválido',
   CodigoErrorEntrada.personasInsuficientes => 'Debe haber al menos una persona',
   CodigoErrorEntrada.propinaInvalida => 'Propina inválida',
+  CodigoErrorEntrada.propinaMayorAlCien =>
+    'La propina no puede superar el 100%',
 };
 
 void main() {

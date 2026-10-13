@@ -79,181 +79,16 @@ class _PantallaDivisorState extends State<PantallaDivisor> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(22, 18, 22, 30),
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE3EFE6),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Icon(
-                        Icons.call_split_rounded,
-                        color: _verde,
-                        size: 23,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'CUENTA CLARA',
-                      style: TextStyle(
-                        color: _verde,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.5,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
-                ),
+                _encabezado(),
                 const SizedBox(height: 28),
-                const Text(
-                  'Una cuenta,\ncuentas claras.',
-                  style: TextStyle(
-                    color: _tinta,
-                    fontSize: 34,
-                    height: 1.08,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -1.2,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Divide la cuenta sin complicarte.',
-                  style: TextStyle(color: Color(0xFF77817A), fontSize: 15),
-                ),
+                ..._introduccion(),
                 const SizedBox(height: 24),
-                _campo(
-                  clave: 'monto',
-                  etiqueta: 'Monto total',
-                  controlador: _monto,
-                  teclado: const TextInputType.numberWithOptions(decimal: true),
-                  prefijo: '\$ ',
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _campo(
-                        clave: 'personas',
-                        etiqueta: 'Personas',
-                        controlador: _personas,
-                        teclado: TextInputType.number,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _campo(
-                        clave: 'propina',
-                        etiqueta: 'Propina (%)',
-                        controlador: _propina,
-                        teclado: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 22),
-                const Text(
-                  'MODO DE REDONDEO',
-                  style: TextStyle(
-                    color: Color(0xFF6D7971),
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1.15,
-                    fontSize: 11,
-                  ),
-                ),
-                const SizedBox(height: 9),
-                Wrap(
-                  spacing: 9,
-                  children: widget.etiquetasEstrategia.entries.map((entrada) {
-                    return ChoiceChip(
-                      label: Text(entrada.value),
-                      selected: _estrategiaId == entrada.key,
-                      onSelected: (_) {
-                        setState(() {
-                          _estrategiaId = entrada.key;
-                          _importePorPersona = null;
-                          _mensajeError = null;
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
+                ..._camposDeEntrada(),
+                ..._selectorRedondeo(),
                 const SizedBox(height: 20),
-                FilledButton.icon(
-                  onPressed: _calcular,
-                  icon: const Icon(Icons.calculate_outlined),
-                  label: const Text('Calcular'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: _verde,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(52),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    textStyle: const TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                ),
-                if (_mensajeError != null) ...[
-                  const SizedBox(height: 14),
-                  Container(
-                    key: const ValueKey('error'),
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFEEEE),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Text(
-                      _mensajeError!,
-                      style: const TextStyle(
-                        color: Color(0xFF9D3030),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-                if (_importePorPersona != null) ...[
-                  const SizedBox(height: 20),
-                  Container(
-                    key: const ValueKey('resultado'),
-                    padding: const EdgeInsets.all(21),
-                    decoration: BoxDecoration(
-                      color: _tinta,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'CADA PERSONA PAGA',
-                          style: TextStyle(
-                            color: Color(0xFFB7C8BD),
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.1,
-                            fontSize: 11,
-                          ),
-                        ),
-                        const SizedBox(height: 7),
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            widget.formateador.formatear(_importePorPersona!),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 52,
-                              height: 1.08,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: -1.5,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                _botonCalcular(),
+                if (_mensajeError != null) ..._widgetsError(),
+                if (_importePorPersona != null) ..._widgetsResultado(),
               ],
             ),
           ),
@@ -261,6 +96,185 @@ class _PantallaDivisorState extends State<PantallaDivisor> {
       ),
     );
   }
+
+  Widget _encabezado() {
+    return Row(
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: const Color(0xFFE3EFE6),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: const Icon(Icons.call_split_rounded, color: _verde, size: 23),
+        ),
+        const SizedBox(width: 12),
+        const Text(
+          'CUENTA CLARA',
+          style: TextStyle(
+            color: _verde,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 1.5,
+            fontSize: 13,
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> _introduccion() => [
+    const Text(
+      'Una cuenta,\ncuentas claras.',
+      style: TextStyle(
+        color: _tinta,
+        fontSize: 34,
+        height: 1.08,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -1.2,
+      ),
+    ),
+    const SizedBox(height: 8),
+    const Text(
+      'Divide la cuenta sin complicarte.',
+      style: TextStyle(color: Color(0xFF77817A), fontSize: 15),
+    ),
+  ];
+
+  List<Widget> _camposDeEntrada() => [
+    _campo(
+      clave: 'monto',
+      etiqueta: 'Monto total',
+      controlador: _monto,
+      teclado: const TextInputType.numberWithOptions(decimal: true),
+      prefijo: '\$ ',
+    ),
+    const SizedBox(height: 12),
+    Row(
+      children: [
+        Expanded(
+          child: _campo(
+            clave: 'personas',
+            etiqueta: 'Personas',
+            controlador: _personas,
+            teclado: TextInputType.number,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _campo(
+            clave: 'propina',
+            etiqueta: 'Propina (%)',
+            controlador: _propina,
+            teclado: const TextInputType.numberWithOptions(decimal: true),
+          ),
+        ),
+      ],
+    ),
+    const SizedBox(height: 22),
+  ];
+
+  List<Widget> _selectorRedondeo() => [
+    const Text(
+      'MODO DE REDONDEO',
+      style: TextStyle(
+        color: Color(0xFF6D7971),
+        fontWeight: FontWeight.w800,
+        letterSpacing: 1.15,
+        fontSize: 11,
+      ),
+    ),
+    const SizedBox(height: 9),
+    Wrap(
+      spacing: 9,
+      children: widget.etiquetasEstrategia.entries.map((entrada) {
+        return ChoiceChip(
+          label: Text(entrada.value),
+          selected: _estrategiaId == entrada.key,
+          onSelected: (_) {
+            setState(() {
+              _estrategiaId = entrada.key;
+              _importePorPersona = null;
+              _mensajeError = null;
+            });
+          },
+        );
+      }).toList(),
+    ),
+  ];
+
+  Widget _botonCalcular() => FilledButton.icon(
+    onPressed: _calcular,
+    icon: const Icon(Icons.calculate_outlined),
+    label: const Text('Calcular'),
+    style: FilledButton.styleFrom(
+      backgroundColor: _verde,
+      foregroundColor: Colors.white,
+      minimumSize: const Size.fromHeight(52),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      textStyle: const TextStyle(fontWeight: FontWeight.w700),
+    ),
+  );
+
+  List<Widget> _widgetsError() => [
+    const SizedBox(height: 14),
+    Container(
+      key: const ValueKey('error'),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFEEEE),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Text(
+        _mensajeError!,
+        style: const TextStyle(
+          color: Color(0xFF9D3030),
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+  ];
+
+  List<Widget> _widgetsResultado() => [
+    const SizedBox(height: 20),
+    Container(
+      key: const ValueKey('resultado'),
+      padding: const EdgeInsets.all(21),
+      decoration: BoxDecoration(
+        color: _tinta,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'CADA PERSONA PAGA',
+            style: TextStyle(
+              color: Color(0xFFB7C8BD),
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.1,
+              fontSize: 11,
+            ),
+          ),
+          const SizedBox(height: 7),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              widget.formateador.formatear(_importePorPersona!),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 52,
+                height: 1.08,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -1.5,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  ];
 
   Widget _campo({
     required String clave,
